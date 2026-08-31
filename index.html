@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>内在原型—希腊女神版</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" onload="window.__supabaseLibLoaded=true" onerror="window.__supabaseLibLoadError=true"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" onload="window.__html2canvasLoaded=true" onerror="window.__html2canvasLoadError=true"></script>
+  <style>
+    @font-face {
+      font-family: "Noto Serif SC";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url("https://cdn.jsdelivr.net/npm/@fontsource/noto-serif-sc/files/noto-serif-sc-chinese-simplified-400-normal.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Noto Serif SC";
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url("https://cdn.jsdelivr.net/npm/@fontsource/noto-serif-sc/files/noto-serif-sc-chinese-simplified-700-normal.woff2") format("woff2");
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Noto Serif SC", "Songti SC", "SimSun", serif;
+      background:
+        radial-gradient(circle at top, rgba(180, 170, 120, 0.12), transparent 35%),
+        linear-gradient(180deg, #20251b 0%, #11150f 100%);
+      color: #f4f0df;
+      min-height: 100vh;
+    }
+
+    .app {
+      width: 100%;
+      min-height: 100vh;
+      padding: 24px 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 680px;
+      min-height: 78vh;
+      padding: 34px 24px;
+      border: 1px solid rgba(232, 220, 180, 0.22);
+      border-radius: 24px;
+      background:
+        linear-gradient(rgba(34, 41, 28, 0.92), rgba(20, 25, 18, 0.96));
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.38);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: rgba(206, 190, 126, 0.06);
+      top: -90px;
+      right: -90px;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      border: 1px solid rgba(244, 240, 223, 0.08);
+      bottom: -80px;
+      left: -80px;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .brand {
+      text-align: center;
+      color: #c7d3a0;
+      font-size: 16px;
+      letter-spacing: 1px;
+      margin-bottom: 26px;
+    }
+
+    .tag {
+      text-align: center;
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: rgba(244, 240, 223, 0.76);
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 44px;
+      line-height: 1.18;
+      margin: 20px 0 14px;
+      letter-spacing: 4px;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 15px;
+      color: rgba(244, 240, 223, 0.8);
+      letter-spacing: 1px;
+      margin-bottom: 34px;
+    }
+
+    .intro {
+      font-size: 16px;
+      line-height: 2;
+      color: rgba(244, 240, 223, 0.88);
+      text-align: center;
+      margin: 28px auto;
+      max-width: 520px;
+    }
+
+    .notice {
+      font-size: 13px;
+      line-height: 1.8;
+      color: rgba(244, 240, 223, 0.58);
+      text-align: center;
+      margin-top: 22px;
+    }
+
+    button {
+      border: none;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .main-btn {
+      display: block;
+      width: 220px;
+      margin: 34px auto 0;
+      padding: 14px 22px;
+      border-radius: 999px;
+      background: #d8c98e;
+      color: #182012;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      box-shadow: 0 8px 24px rgba(216, 201, 142, 0.22);
+      transition: all 0.2s ease;
+    }
+
+    .main-btn:hover {
+      transform: translateY(-2px);
+      background: #efe1a6;
+    }
+
+    /* activation */
+    .activation-box, .activation-expired {
+      max-width: 440px;
+      margin: 26px auto 0;
+      padding: 26px 22px;
+      border: 1px solid rgba(216, 201, 142, 0.3);
+      border-radius: 18px;
+      background: rgba(244, 240, 223, 0.05);
+      text-align: center;
+    }
+
+    .activation-title, .expired-title {
+      font-size: 20px;
+      color: #e4d292;
+      margin-bottom: 16px;
+      letter-spacing: 2px;
+      font-weight: 700;
+    }
+
+    .activation-input {
+      width: 100%;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(216, 201, 142, 0.4);
+      background: rgba(0, 0, 0, 0.25);
+      color: #f4f0df;
+      font-size: 16px;
+      font-family: inherit;
+      text-align: center;
+      letter-spacing: 1px;
+      outline: none;
+    }
+
+    .activation-input::placeholder {
+      color: rgba(244, 240, 223, 0.4);
+    }
+
+    .activation-input:focus {
+      border-color: #d8c98e;
+      box-shadow: 0 0 0 2px rgba(216, 201, 142, 0.15);
+    }
+
+    .activation-error {
+      color: #e89e8e;
+      font-size: 14px;
+      margin-top: 10px;
+      min-height: 20px;
+    }
+
+    .activation-tip, .activation-expired p {
+      margin-top: 18px;
+      font-size: 13.5px;
+      color: rgba(244, 240, 223, 0.7);
+      line-height: 1.9;
+    }
+
+    .activation-tip a, .xhs-link {
+      color: #d8c98e;
+      text-decoration: underline;
+      word-break: break-all;
+    }
+
+    .activation-qr {
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    .activation-qr img {
+      width: 140px;
+      height: 140px;
+      border-radius: 12px;
+      background: #fff;
+      padding: 6px;
+      display: inline-block;
+    }
+
+    .activation-qr div {
+      margin-top: 8px;
+      font-size: 12px;
+      color: rgba(244, 240, 223, 0.6);
+    }
+
+    .xhs-link {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 14px;
+    }
+
+    .poster-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.88);
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 18px;
+    }
+
+    .poster-modal .modal-card {
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+    }
+
+    .poster-modal img {
+      max-width: 100%;
+      max-height: 72vh;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      background: #fff;
+    }
+
+    .poster-modal .poster-tip {
+      margin-top: 14px;
+      font-size: 14px;
+      color: rgba(244, 240, 223, 0.82);
+    }
+
+    .poster-modal .actions {
+      margin-top: 18px;
+    }
+
+    #posterTemplate {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 375px;
+      padding: 36px 28px;
+      background: linear-gradient(180deg, #252b1f 0%, #141812 100%);
+      color: #f4f0df;
+      font-family: "Noto Serif SC", "Songti SC", "SimSun", serif;
+      text-align: center;
+      visibility: hidden;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .poster-brand {
+      font-size: 12px;
+      color: #c7d3a0;
+      letter-spacing: 2px;
+      margin-bottom: 18px;
+    }
+
+    .poster-title {
+      font-size: 15px;
+      color: rgba(244, 240, 223, 0.7);
+      margin-bottom: 10px;
+    }
+
+    .poster-goddess {
+      font-size: 38px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      margin-bottom: 6px;
+      color: #f6edc8;
+    }
+
+    .poster-english {
+      font-size: 18px;
+      color: #d8c98e;
+      margin-bottom: 8px;
+    }
+
+    .poster-subtitle {
+      font-size: 15px;
+      color: rgba(244, 240, 223, 0.82);
+      margin-bottom: 18px;
+    }
+
+    .poster-keywords {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 22px;
+    }
+
+    .poster-keyword {
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: rgba(216, 201, 142, 0.13);
+      border: 1px solid rgba(216, 201, 142, 0.24);
+      color: #eee1a9;
+      font-size: 12px;
+    }
+
+    .poster-quote {
+      margin: 0 0 24px;
+      padding: 16px;
+      border-left: 3px solid #d8c98e;
+      background: rgba(244, 240, 223, 0.06);
+      line-height: 1.8;
+      font-size: 15px;
+      color: #f6edc8;
+      text-align: left;
+    }
+
+    .poster-bottom {
+      margin-top: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .poster-qr img {
+      width: 86px;
+      height: 86px;
+      border-radius: 10px;
+      background: #fff;
+      padding: 5px;
+    }
+
+    .poster-qr-text {
+      font-size: 12px;
+      color: rgba(244, 240, 223, 0.65);
+      margin-top: 6px;
+    }
+
+    .poster-invite {
+      text-align: left;
+      font-size: 13px;
+      line-height: 1.8;
+      color: rgba(244, 240, 223, 0.7);
+    }
+
+    .progress {
+      font-size: 14px;
+      color: rgba(244, 240, 223, 0.62);
+      margin-bottom: 18px;
+      letter-spacing: 1px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      border-radius: 99px;
+      background: rgba(244, 240, 223, 0.14);
+      margin-bottom: 28px;
+      overflow: hidden;
+    }
+
+    .progress-inner {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #9eaa70, #e4d292);
+      border-radius: 99px;
+      transition: width 0.25s ease;
+    }
+
+    .question-title {
+      font-size: 25px;
+      line-height: 1.55;
+      margin-bottom: 28px;
+      font-weight: 700;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-btn {
+      width: 100%;
+      text-align: left;
+      padding: 15px 16px;
+      border-radius: 16px;
+      background: rgba(244, 240, 223, 0.08);
+      color: #f4f0df;
+      border: 1px solid rgba(244, 240, 223, 0.16);
+      font-size: 16px;
+      line-height: 1.55;
+      transition: all 0.18s ease;
+    }
+
+    .option-btn:hover {
+      background: rgba(216, 201, 142, 0.16);
+      border-color: rgba(216, 201, 142, 0.48);
+      transform: translateX(4px);
+    }
+
+    .option-key {
+      color: #d8c98e;
+      font-weight: 700;
+      margin-right: 8px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 100px 0;
+    }
+
+    .moon {
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 26px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #f5ecc2, #b8a96c 65%, #74683f);
+      box-shadow: 0 0 30px rgba(216, 201, 142, 0.45);
+      animation: pulse 1.8s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.8;
+      }
+      50% {
+        transform: scale(1.08);
+        opacity: 1;
+      }
+    }
+
+    .loading-text {
+      font-size: 18px;
+      color: rgba(244, 240, 223, 0.84);
+      letter-spacing: 1px;
+      line-height: 2;
+    }
+
+    .result-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .result-label {
+      color: rgba(244, 240, 223, 0.7);
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .result-name {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
+
+    .result-english {
+      font-size: 18px;
+      color: #d8c98e;
+      margin-bottom: 8px;
+    }
+
+    .result-title {
+      font-size: 18px;
+      color: rgba(244, 240, 223, 0.86);
+    }
+
+    .keywords {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 24px 0;
+    }
+
+    .keyword {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(216, 201, 142, 0.13);
+      border: 1px solid rgba(216, 201, 142, 0.24);
+      color: #eee1a9;
+      font-size: 13px;
+    }
+
+    .quote {
+      margin: 26px 0;
+      padding: 22px;
+      border-left: 3px solid #d8c98e;
+      background: rgba(244, 240, 223, 0.06);
+      line-height: 1.9;
+      font-size: 17px;
+      color: #f6edc8;
+    }
+
+    .section {
+      margin-top: 28px;
+    }
+
+    .section h3 {
+      font-size: 20px;
+      color: #e4d292;
+      margin-bottom: 10px;
+    }
+
+    .section p {
+      font-size: 15.5px;
+      line-height: 1.95;
+      color: rgba(244, 240, 223, 0.86);
+      margin: 0;
+    }
+
+    .section ul {
+      padding-left: 20px;
+      color: rgba(244, 240, 223, 0.86);
+      line-height: 1.9;
+      font-size: 15.5px;
+    }
+
+    .secondary-box {
+      margin-top: 22px;
+      padding: 18px;
+      border-radius: 16px;
+      background: rgba(158, 170, 112, 0.12);
+      border: 1px solid rgba(158, 170, 112, 0.26);
+      line-height: 1.8;
+    }
+
+    .result-qr-section {
+      margin-top: 34px;
+      padding: 24px;
+      border-radius: 18px;
+      border: 1px solid rgba(216, 201, 142, 0.22);
+      background: rgba(244, 240, 223, 0.05);
+      text-align: center;
+    }
+
+    .result-qr-title {
+      font-size: 18px;
+      color: #e4d292;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .result-qr-section p {
+      font-size: 14px;
+      color: rgba(244, 240, 223, 0.7);
+      line-height: 1.8;
+      margin: 0 0 12px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 34px;
+    }
+
+    .small-btn {
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: rgba(244, 240, 223, 0.1);
+      border: 1px solid rgba(244, 240, 223, 0.18);
+      color: #f4f0df;
+      font-size: 15px;
+    }
+
+    .small-btn.primary {
+      background: #d8c98e;
+      color: #182012;
+      font-weight: 700;
+    }
+
+    .score-list {
+      margin-top: 20px;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      font-size: 13px;
+      color: rgba(244, 240, 223, 0.64);
+      line-height: 1.7;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 520px) {
+      .app {
+        padding: 14px;
+        align-items: flex-start;
+      }
+
+      .card {
+        padding: 28px 18px;
+        border-radius: 20px;
+        min-height: calc(100vh - 28px);
+      }
+
+      h1 {
+        font-size: 36px;
+      }
+
+      .question-title {
+        font-size: 22px;
+      }
+
+      .option-btn {
+        font-size: 15px;
+      }
+
+      .result-name {
+        font-size: 31px;
+      }
+
+      .activation-box, .activation-expired {
+        padding: 22px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="card">
+      <div class="content">
+
+        <section id="coverPage">
+          <div class="brand">重境社 Realmitera </div>
+          <div class="tag">内在女神</div>
+          <h1>希腊女神<br>原型测试</h1>
+          <div class="subtitle">Inner Goddess Prototype Test</div>
+          <div class="intro">
+            16 道直觉选择题，<br>
+            召唤你内在最鲜明的女神力量。<br><br>
+            也许你是月下的猎人，<br>
+            也许你是城邦的智者，<br>
+            也许你是炉火旁安静的守护者。
+          </div>
+
+          <div id="activationBox" class="activation-box hidden">
+            <div class="activation-title">请输入激活码</div>
+            <input type="text" id="activationInput" class="activation-input" placeholder="例如：GODDESS-A8RD-3PQL" autocomplete="off" />
+            <button class="main-btn" onclick="handleActivate()" style="margin-top: 8px;">激活并进入</button>
+            <div id="activationError" class="activation-error"></div>
+            <div class="activation-tip">
+              没有激活码？<br>
+              前往小红书博主「王三洲」主页获取<br>
+              <a href="http://xhslink.com/m/45i2cQhiynB" target="_blank">http://xhslink.com/m/45i2cQhiynB</a>
+            </div>
+            <div class="activation-qr">
+              <img id="coverQrImg" src="" alt="小红书 王三洲" />
+              <div>扫码获取激活码</div>
+            </div>
+          </div>
+
+          <button id="startBtn" class="main-btn hidden" onclick="startTest()">开始测试</button>
+
+          <div id="activationExpiredBox" class="activation-expired hidden">
+            <div class="expired-title">激活码已过期</div>
+            <p>你的激活码已超过 30 天有效期，请前往小红书博主「王三洲」主页获取新激活码。</p>
+            <div class="activation-qr">
+              <img id="expiredQrImg" src="" alt="小红书 王三洲" />
+              <div>扫码关注「王三洲」</div>
+            </div>
+            <a class="xhs-link" href="http://xhslink.com/m/45i2cQhiynB" target="_blank">前往小红书主页 →</a><br>
+            <button class="small-btn" onclick="resetActivation()" style="margin-top: 16px;">输入新激活码</button>
+          </div>
+
+          <div class="notice">
+            本测试仅供娱乐、自我探索和内容分享参考，<br>
+            不作为心理学诊断或现实决策依据。
+          </div>
+        </section>
+
+        <section id="questionPage" class="hidden">
+          <div class="progress" id="progressText"></div>
+          <div class="progress-bar">
+            <div class="progress-inner" id="progressInner"></div>
+          </div>
+          <div class="question-title" id="questionTitle"></div>
+          <div class="options" id="optionsBox"></div>
+        </section>
+
+        <section id="loadingPage" class="hidden">
+          <div class="loading">
+            <div class="moon"></div>
+            <div class="loading-text" id="loadingText">
+              正在点燃神殿之火……
+            </div>
+          </div>
+        </section>
+
+        <section id="resultPage" class="hidden">
+          <div class="result-header">
+            <div class="result-label">你的希腊女神原型是</div>
+            <div class="result-name" id="resultName"></div>
+            <div class="result-english" id="resultEnglish"></div>
+            <div class="result-title" id="resultTitle"></div>
+          </div>
+
+          <div class="keywords" id="keywordsBox"></div>
+
+          <div class="quote" id="posterQuote"></div>
+
+          <div class="secondary-box" id="secondaryBox"></div>
+
+          <div class="section">
+            <h3>神话原型</h3>
+            <p id="mythText"></p>
+          </div>
+
+          <div class="section">
+            <h3>你的性格画像</h3>
+            <p id="personalityText"></p>
+          </div>
+
+          <div class="section">
+            <h3>你的天赋</h3>
+            <ul id="talentsList"></ul>
+          </div>
+
+          <div class="section">
+            <h3>你的关系模式</h3>
+            <p id="relationshipText"></p>
+          </div>
+
+          <div class="section">
+            <h3>你的阴影面</h3>
+            <p id="shadowText"></p>
+          </div>
+
+          <div class="section">
+            <h3>成长提醒</h3>
+            <p id="growthText"></p>
+          </div>
+
+          <div class="result-qr-section">
+            <div class="result-qr-title">喜欢这个结果？</div>
+            <p>把测试结果分享给好友，<br>或来小红书「王三洲」主页获取更多内在探索，<br>你的神谕不止于此。</p>
+            <div class="activation-qr">
+              <img id="resultQrImg" src="" alt="小红书 王三洲" />
+              <div>扫码关注「王三洲」</div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="small-btn primary" onclick="restartTest()">重新测试</button>
+            <button class="small-btn" onclick="copyResult()">复制结果</button>
+            <button class="small-btn" onclick="generatePoster()">生成海报</button>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="posterModal" class="poster-modal hidden">
+    <div class="modal-card">
+      <div id="posterImageBox"></div>
+      <div class="poster-tip">长按图片保存到相册，或点击下载海报</div>
+      <div class="actions">
+        <button class="small-btn primary" id="downloadPosterBtn">下载海报</button>
+        <button class="small-btn" onclick="closePoster()">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="posterTemplate">
+    <div class="poster-brand">重境社 Realmitera · 内在女神</div>
+    <div class="poster-title">希腊女神原型测试</div>
+    <div class="poster-title" style="margin-bottom: 18px;">我的内在女神是</div>
+    <div class="poster-goddess" id="posterGoddessName"></div>
+    <div class="poster-english" id="posterGoddessEnglish"></div>
+    <div class="poster-subtitle" id="posterGoddessTitle"></div>
+    <div class="poster-keywords" id="posterKeywords"></div>
+    <div class="poster-quote" id="posterQuoteText"></div>
+    <div class="poster-bottom">
+      <div class="poster-qr">
+        <img id="posterQrImg" src="" alt="小红书 王三洲" />
+        <div class="poster-qr-text">扫码测测你的</div>
+      </div>
+      <div class="poster-invite">
+        16 道直觉题<br>
+        召唤你内在的女神力量<br>
+        来小红书「王三洲」主页<br>
+        获取更多内在探索
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://rfqgzegjpfgmimfvbtcc.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_LWOQViD_u_IkhadGsO3wbA_wg3xxypF';
+    const XIAOHONGSHU_URL = 'http://xhslink.com/m/45i2cQhiynB';
+    const QR_CODE_DATA_URL = 'data:image/png;base64,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';
+
+    let supabaseClient = null;
+
+    function initSupabase() {
+      if (supabaseClient) return true;
+      if (!window.supabase) {
+        return false;
+      }
+      try {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        return true;
+      } catch (e) {
+        console.error('Supabase init error:', e);
+        return false;
+      }
+    }
+
+    function getDeviceId() {
+      let id = localStorage.getItem('goddess_device_id');
+      if (!id) {
+        id = (crypto.randomUUID ? crypto.randomUUID() : 'd-' + Math.random().toString(36).slice(2) + Date.now());
+        localStorage.setItem('goddess_device_id', id);
+      }
+      return id;
+    }
+
+    function getActivationLocal() {
+      try {
+        const raw = localStorage.getItem('goddess_activation');
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function saveActivationLocal(code, expiresAt) {
+      localStorage.setItem('goddess_activation', JSON.stringify({
+        code: code,
+        expires_at: expiresAt,
+        device_id: getDeviceId()
+      }));
+    }
+
+    function clearActivationLocal() {
+      localStorage.removeItem('goddess_activation');
+    }
+
+    function showActivationState(state) {
+      document.getElementById('activationBox').classList.add('hidden');
+      document.getElementById('startBtn').classList.add('hidden');
+      document.getElementById('activationExpiredBox').classList.add('hidden');
+      if (state === 'active') document.getElementById('startBtn').classList.remove('hidden');
+      else if (state === 'need') document.getElementById('activationBox').classList.remove('hidden');
+      else if (state === 'expired') document.getElementById('activationExpiredBox').classList.remove('hidden');
+    }
+
+    async function handleActivate() {
+      const input = document.getElementById('activationInput');
+      const errorBox = document.getElementById('activationError');
+      const code = input.value.trim().toUpperCase();
+      if (!code) {
+        errorBox.textContent = '请输入激活码';
+        return;
+      }
+
+      if (!initSupabase()) {
+        errorBox.innerHTML = '网络加载失败，未能连接到验证服务。<br>请刷新页面重试，或检查网络能否访问海外 CDN。';
+        return;
+      }
+
+      errorBox.textContent = '正在验证…';
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('activation_codes')
+          .select('*')
+          .eq('code', code)
+          .eq('status', 'unused')
+          .eq('product_type', 'goddess')
+          .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`)
+          .limit(1);
+
+        if (error) {
+          console.error('Select error:', error);
+          errorBox.textContent = '验证服务异常：' + error.message;
+          return;
+        }
+
+        if (!data || data.length === 0) {
+          errorBox.textContent = '激活码无效、已被使用或已过期，请重新获取';
+          return;
+        }
+
+        const record = data[0];
+        const now = new Date();
+        const expiresAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+        const deviceId = getDeviceId();
+
+        const { error: updateError } = await supabaseClient
+          .from('activation_codes')
+          .update({
+            status: 'used',
+            activated_at: now.toISOString(),
+            expires_at: expiresAt.toISOString(),
+            device_id: deviceId,
+            user_agent: navigator.userAgent
+          })
+          .eq('id', record.id);
+
+        if (updateError) {
+          console.error('Update error:', updateError);
+          errorBox.textContent = '激活失败：' + updateError.message;
+          return;
+        }
+
+        saveActivationLocal(code, expiresAt.toISOString());
+        showActivationState('active');
+      } catch (err) {
+        console.error('Activate exception:', err);
+        errorBox.textContent = '验证过程出错：' + (err && err.message ? err.message : '未知错误，请刷新重试');
+      }
+    }
+
+    function resetActivation() {
+      document.getElementById('activationInput').value = '';
+      document.getElementById('activationError').textContent = '';
+      showActivationState('need');
+    }
+
+    function initActivation() {
+      document.getElementById('coverQrImg').src = QR_CODE_DATA_URL;
+      document.getElementById('expiredQrImg').src = QR_CODE_DATA_URL;
+      document.getElementById('resultQrImg').src = QR_CODE_DATA_URL;
+      const act = getActivationLocal();
+      if (act && new Date(act.expires_at) > new Date()) {
+        showActivationState('active');
+      } else if (act) {
+        clearActivationLocal();
+        showActivationState('expired');
+      } else {
+        showActivationState('need');
+      }
+    }
+
+    const questions = [
+      {
+        title: "如果你可以拥有一座只属于自己的神殿，你希望它建在哪里？",
+        options: {
+          A: "森林深处，靠近月光、野兽和无人踏足的小路",
+          B: "高处的城邦中心，可以俯瞰全局、制定方向",
+          C: "安静的庭院里，有炉火、书、清水和不被打扰的时间",
+          D: "宏伟的宫殿中，象征身份、盟约和不可动摇的位置",
+          E: "肥沃的田野旁，四季作物丰茂，人们生活富足",
+          F: "从地下到光明的门口，连接着黑暗与新生",
+          G: "海边或花园里，有香气、音乐、身体与感官的愉悦"
+        }
+      },
+      {
+        title: "当你感到迷失时，你最想找回的是什么？",
+        options: {
+          A: "属于自己的方向感，不再被任何人牵着走",
+          B: "清晰的判断力，知道下一步该怎么做",
+          C: "平静的心，不再被外界的声音打乱",
+          D: "稳定的关系，不再摇摆",
+          E: "被需要、被依靠，也能继续给予爱的能力",
+          F: "接受变化的勇气，相信自己还能重新开始",
+          G: "对生活的热情、心动和美的感知"
+        }
+      },
+      {
+        title: "如果朋友突然陷入混乱，你的第一反应通常是？",
+        options: {
+          A: "直接帮她从困境里抽身，先离开危险或消耗源",
+          B: "帮她梳理现状，分析利弊和真正的问题",
+          C: "让她先安静下来，别急着做任何决定",
+          D: "问清楚相关人的责任、承诺和边界",
+          E: "陪在她身边，照顾她的情绪和生活状态",
+          F: "告诉她这可能是一次转折，不必害怕崩塌",
+          G: "鼓励她把感受说出来，不要压抑自己的渴望"
+        }
+      },
+      {
+        title: "你最容易被哪种女性力量吸引？",
+        options: {
+          A: "不依附任何人，永远忠于自己道路的力量",
+          B: "思维锋利、冷静果断、能掌控局面的力量",
+          C: "安静却坚定，不被喧嚣吞没的力量",
+          D: "拥有位置感、气场和长期经营关系的力量",
+          E: "温柔丰盛，能够滋养他人与生活的力量",
+          F: "经历黑暗后仍能开花的力量",
+          G: "鲜活迷人，敢爱、敢美、敢表达的力量"
+        }
+      },
+      {
+        title: "如果你进入一段新的关系，你最先观察什么？",
+        options: {
+          A: "我是否还能保持自由和完整的自我",
+          B: "对方是否理性成熟，沟通是否有效",
+          C: "这段关系是否让我感到安心和平静",
+          D: "对方是否认真、忠诚，并愿意给出承诺",
+          E: "我们是否能彼此照顾，成为生活中的依靠",
+          F: "这段关系是否会推动我成长或改变",
+          G: "我们之间是否有吸引力、浪漫感和心动"
+        }
+      },
+      {
+        title: "当你被误解时，你更可能怎么做？",
+        options: {
+          A: "不过度解释，必要时直接拉开距离",
+          B: "用事实和逻辑澄清，不让问题模糊",
+          C: "先保持沉默，等心情稳定后再说",
+          D: "要求对方正视关系中的尊重和界限",
+          E: "试着理解对方的情绪，也表达自己的委屈",
+          F: "把这次误解当成一次看清关系的机会",
+          G: "用更真诚、更有感染力的方式表达自己"
+        }
+      },
+      {
+        title: "你最害怕自己变成什么样？",
+        options: {
+          A: "被驯服、被安排、失去自我选择的人",
+          B: "失去判断力，被情绪或他人牵着走的人",
+          C: "长期焦躁、内心失序、无法安定的人",
+          D: "在重要关系里不被尊重、不被承认的人",
+          E: "只会付出，却忘记照顾自己的人",
+          F: "停在旧身份里，不敢变化和重生的人",
+          G: "对爱、美、欲望和生活热情都麻木的人"
+        }
+      },
+      {
+        title: "如果你拥有一种天赋，它最像什么？",
+        options: {
+          A: "在荒野中找到路，并保护自己的边界",
+          B: "在复杂局面里看见结构和关键",
+          C: "在混乱世界里守住一盏内在的灯火",
+          D: "让关系、秩序和承诺获得真正的力量",
+          E: "让贫瘠之地唤醒沉睡的生机，让生命再次绽放",
+          F: "于逆境中重塑自我，以不屈的精神迎接每一次蜕变",
+          G: "让平凡事物焕发光彩，能赋予事物独特的魅力"
+        }
+      },
+      {
+        title: "当你需要独处时，你通常是在做什么？",
+        options: {
+          A: "恢复自己的野性和行动力，不想被打扰",
+          B: "思考问题、复盘计划、整理信息",
+          C: "清理空间、安静休息、回到自己的节奏",
+          D: "思考关系中的位置、责任和未来",
+          E: "修复自己的能量，好继续照顾重要的人",
+          F: "消化变化，等待内在慢慢完成转换",
+          G: "沉浸在音乐、影像、香气、身体或创作里"
+        }
+      },
+      {
+        title: "你对“安全感”的理解更接近哪一种？",
+        options: {
+          A: "我有随时离开的能力和选择权",
+          B: "我知道事情的逻辑，也知道如何应对",
+          C: "我的内心和生活节奏是稳定的",
+          D: "关系明确，承诺清楚，彼此被尊重",
+          E: "身边有人互相照顾，生活有温度",
+          F: "即使变化发生，我也能重新适应",
+          G: "我能真实地爱、被爱，也能感受美好"
+        }
+      },
+      {
+        title: "如果人生给你一份试炼，它最可能是？",
+        options: {
+          A: "学会在孤独中仍然坚定地选择自己",
+          B: "学会在混乱中保持清醒和策略",
+          C: "学会在喧嚣中守住自己的内在秩序",
+          D: "学会在关系中建立尊重、忠诚和边界",
+          E: "学会在照顾别人时不耗尽自己",
+          F: "学会穿越低谷，并承认变化也是命运的一部分",
+          G: "学会不羞耻于自己的渴望、魅力和感受"
+        }
+      },
+      {
+        title: "你最想从生活中获得哪种礼物？",
+        options: {
+          A: "自由的时间和辽阔的空间",
+          B: "清晰的目标和可以实现的蓝图",
+          C: "稳定的日常和不被打扰的心境",
+          D: "被郑重选择、被尊重对待的关系",
+          E: "温暖的家庭感和彼此滋养的连接",
+          F: "新阶段、新身份和重新开始的机会",
+          G: "热烈的爱、美丽的体验和创造的灵感"
+        }
+      },
+      {
+        title: "在重要选择面前，你更相信什么？",
+        options: {
+          A: "身体里的直觉：我知道哪里不属于我",
+          B: "理性推演：看清代价、收益和长期结果",
+          C: "内在感受：这件事是否让我安定",
+          D: "现实关系：它是否符合承诺、责任和位置",
+          E: "情感牵挂：它是否照顾到我在意的人",
+          F: "命运流动：有些改变必须发生",
+          G: "心动感：我是否真正被它点亮"
+        }
+      },
+      {
+        title: "你最希望别人如何理解你？",
+        options: {
+          A: "我不是冷漠，只是需要自由和边界",
+          B: "我不是无情，只是习惯先保持清醒",
+          C: "我不是退缩，只是更珍惜内在的安宁",
+          D: "我不是强势，只是重视承诺和尊重",
+          E: "我不是理所当然地付出，我也需要被照顾",
+          F: "我不是善变，我只是在不同阶段里成长",
+          G: "我不是肤浅，我只是认真感受爱与美"
+        }
+      },
+      {
+        title: "如果用一种自然意象形容你，你更像？",
+        options: {
+          A: "夜色中的森林，独立、神秘、难以被捕捉",
+          B: "山顶的星图，清晰、理性、指引方向",
+          C: "屋内的炉火，安静、稳定、持续发光",
+          D: "古老的王座，庄重、有分量、象征盟约",
+          E: "金色麦田，丰盛、滋养、孕育生命",
+          F: "春天前的地底，沉默、转换、等待重生",
+          G: "海浪与玫瑰，柔软、迷人、充满感官力量"
+        }
+      },
+      {
+        title: "此刻的你最需要哪一句神谕？",
+        options: {
+          A: "不要为了被接纳，而放弃属于你的旷野。",
+          B: "看清局势，你的智慧会为你开路。",
+          C: "回到内心，真正的安宁不必向外索取。",
+          D: "你值得被郑重选择，也值得被忠诚对待。",
+          E: "你的温柔很珍贵，但也要留一部分给自己。",
+          F: "旧的你正在结束，新的你正在靠近。",
+          G: "不要压低你的光，爱与美也是你的力量。"
+        }
+      }
+    ];
+
+    const resultMap = {
+      A: {
+        name: "阿尔忒弥斯",
+        english: "Artemis",
+        title: "月下猎人与自由守护者",
+        keywords: ["独立", "自由", "边界", "野性", "直觉", "行动力"],
+        quote: "你属于自己，也属于旷野。你的自由不是逃离，而是忠于内心的方向。",
+        myth: "阿尔忒弥斯是古希腊神话中的月亮与狩猎女神，也是自然、野外、少女与纯洁的守护者。她常被描绘为手持弓箭、行走于山林之间的年轻女神，身边伴随着野兽、月光与自由的风。她不属于宫殿，也不属于任何人的期待。她属于森林、夜色、旷野，也属于她自己。",
+        personality: "如果你的主原型是阿尔忒弥斯，你的内在有一种很强的自我归属感。你不喜欢被过度管束，也很难长期待在让你感到窒息的关系或环境里。你需要空间，需要自主决定的权利，也需要一种“我可以随时选择自己人生”的底气。你可能不是最喜欢热闹的人，但你有很强的行动力。当你真正想做一件事时，你不太需要别人催促，也不会等所有条件都完美才开始。",
+        talents: ["擅长独立判断，不容易被群体情绪裹挟", "有很强的边界感，知道什么可以靠近，什么必须远离", "面对未知时，有一种直接出发的勇气", "适合开拓新领域、独立创作、自由职业、旅行探索", "能在孤独中积蓄力量，而不是被孤独击垮"],
+        relationship: "在关系里，你最在意的是：我还是不是我自己。你可以很爱一个人，但你不希望爱变成控制。你需要亲密，也需要距离；需要陪伴，也需要自由呼吸的空间。",
+        shadow: "阿尔忒弥斯原型的阴影，是可能过度防御。你可能习惯什么都自己扛，不愿意示弱，也不太愿意承认自己需要别人。有时你会因为害怕被束缚，而提前逃离一段本可以温柔发展的关系。",
+        growth: "你不必为了被接纳而放弃旷野。但也可以试着相信，有些靠近不会夺走你的自由，反而会让你更安心地成为自己。",
+        secondary: "你的隐藏力量，是保护自我边界与自由的能力。"
+      },
+      B: {
+        name: "雅典娜",
+        english: "Athena",
+        title: "城邦智者与清醒战略家",
+        keywords: ["智慧", "理性", "策略", "判断", "公平", "秩序"],
+        quote: "你看见局势，也看见道路。你的智慧，是混乱中的一束冷光。",
+        myth: "雅典娜是古希腊神话中的智慧女神、战争策略女神与工艺守护神。她不是冲动的战斗者，而是冷静的布局者。她象征理性、战略、秩序、技艺与公平。",
+        personality: "如果你的主原型是雅典娜，你的内在有一种强大的理性核心。你擅长观察、分析、判断和规划。面对混乱，你的第一反应通常不是崩溃，而是想弄清楚现在发生了什么、问题的关键在哪里、下一步最有效的行动是什么。",
+        talents: ["擅长在复杂局面中找到关键点", "有强大的学习能力和系统思维", "适合做规划、管理、分析、策略、研究类事情", "面对压力时通常能保持清醒", "能帮助别人从情绪泥潭中看见现实路径"],
+        relationship: "在关系里，你重视成熟沟通和精神匹配。你很难长期忍受混乱、失控、无逻辑的关系。你希望对方能讲道理、有责任感，也能在关键问题上与你站在同一条线上。",
+        shadow: "雅典娜原型的阴影，是可能过度理性。你有时会太快进入分析模式，忽略了自己和他人的感受。你可能习惯解决问题，却不习惯允许脆弱存在。",
+        growth: "你的智慧很珍贵。但请记得，情绪不是理性的敌人，它只是另一种信息。当你允许自己感受，你的判断不会变弱，反而会更完整。",
+        secondary: "你的隐藏力量，是在混乱中保持清醒判断。"
+      },
+      C: {
+        name: "赫斯提亚",
+        english: "Hestia",
+        title: "炉火守护者与内在安宁者",
+        keywords: ["平静", "稳定", "独处", "秩序", "安宁", "内在力量"],
+        quote: "你心中有一盏不灭的炉火。真正的安宁，来自你与自己的和解。",
+        myth: "赫斯提亚是古希腊神话中的炉火女神，也是家庭圣火、内在稳定与安宁秩序的象征。她不像其他女神那样卷入激烈的争斗，却始终守护着火、家、安定与中心。",
+        personality: "如果你的主原型是赫斯提亚，你的内在有一种很强的安宁需求。你可能不喜欢太吵、太乱、太高消耗的环境。比起不断向外扩张，你更需要一个可以回到自己的地方。",
+        talents: ["有稳定场域的能力，让身边人感到安心", "适合做需要耐心、专注和持续性的事情", "能在简单日常中发现深层意义", "对空间、美感、生活秩序有天然敏感度", "擅长独处，也能从安静中恢复力量"],
+        relationship: "在关系里，你需要的是安稳、平和、不被过度消耗。你不喜欢戏剧化的拉扯，也不喜欢情绪忽冷忽热。如果一段关系让你长期焦虑，你会慢慢关闭自己。",
+        shadow: "赫斯提亚原型的阴影，是可能过度退回自己的世界。你有时为了避免冲突，会选择沉默；为了保持平静，会压下真实需求。",
+        growth: "你的安静是一种力量。但当你真正想要什么时，也请允许自己开口、行动、靠近这个世界。",
+        secondary: "你的隐藏力量，是让自己回到平静与秩序。"
+      },
+      D: {
+        name: "赫拉",
+        english: "Hera",
+        title: "王座女王与关系守誓者",
+        keywords: ["承诺", "忠诚", "关系", "权威", "责任", "尊严"],
+        quote: "你值得被郑重选择，也值得被忠诚对待。你的王冠，不需要任何人授予。",
+        myth: "赫拉是古希腊神话中的婚姻与家庭女神，也是奥林匹斯十二主神之一。她象征承诺、忠诚、权威、婚姻秩序与女性尊严。",
+        personality: "如果你的主原型是赫拉，你的内在很重视关系中的位置感和尊重感。你认为重要关系必须有清晰的态度、承诺和责任。你不喜欢模糊、不确定、暧昧不明的状态。",
+        talents: ["擅长建立长期关系和稳定合作", "有强烈的责任感和经营意识", "重视规则、公平和身份确认", "在群体中容易形成权威感", "能让关系从松散走向稳定和正式"],
+        relationship: "在关系里，你最在意的是：我是否被郑重选择。你需要明确的承诺、公开的态度和长期的安全感。对你来说，爱不仅是心动，也是责任、秩序和共同守护。",
+        shadow: "赫拉原型的阴影，是可能把自我价值过度绑定在关系位置上。当关系不稳定时，你可能会怀疑自己，或陷入控制、比较、不安。",
+        growth: "请守护你的尊严，也守护你的自由。真正的承诺不会让你失去自己，而会让你更稳地站在自己的王座上。",
+        secondary: "你的隐藏力量，是建立承诺、关系和尊严。"
+      },
+      E: {
+        name: "狄米特",
+        english: "Demeter",
+        title: "丰收母神与生命滋养者",
+        keywords: ["滋养", "照顾", "守护", "丰盛", "耐心", "生命力"],
+        quote: "你像一片金色麦田，温柔却丰盛。别忘了，你也是需要被滋养的生命。",
+        myth: "狄米特是古希腊神话中的农业、丰收与生命循环女神。她掌管土地、作物、生长、粮食和大地的丰饶，也象征一种温柔却强大的滋养力量。",
+        personality: "如果你的主原型是狄米特，你的内在有很强的照顾和滋养本能。你很容易注意到别人的需要，也习惯让身边人感觉被接住。你身上有一种温暖、可靠、丰盛的气质。",
+        talents: ["能让别人感到被照顾和被接纳", "有很强的生活力和修复力", "适合教育、疗愈、陪伴、服务、养育、内容滋养类工作", "擅长把混乱的生活重新养回来", "能在长期关系中提供稳定温暖的支持"],
+        relationship: "在关系里，你常常是给予更多的那一个。你喜欢照顾重要的人，也容易因为对方的状态而牵动情绪。但你需要注意，不要把被需要误认为被爱。",
+        shadow: "狄米特原型的阴影，是可能过度牺牲。你可能很难拒绝别人，也容易因为照顾他人而忽略自己的疲惫。",
+        growth: "你的温柔和照顾能力很珍贵。但请把自己也放进被照顾的名单里。当你先滋养自己，你给予出去的爱才不会变成耗竭。",
+        secondary: "你的隐藏力量，是滋养他人与修复生活。"
+      },
+      F: {
+        name: "珀尔塞福涅",
+        english: "Persephone",
+        title: "冥界王后与春日重生者",
+        keywords: ["转化", "成长", "适应", "新生", "敏感", "周期"],
+        quote: "你从黑暗中走来，也将带着春天归来。每一次改变，都是你重生的入口。",
+        myth: "珀尔塞福涅是狄米特的女儿，也是春天女神与冥界王后。她的神话与被带入冥界、季节循环、离别、归来和重生有关。她象征人生中的转折、阴影、成长和新身份的诞生。",
+        personality: "如果你的主原型是珀尔塞福涅，你的内在拥有很强的转化能力。你可能敏感、多面，容易感受到细微变化，也常常在人生不同阶段里变成不一样的自己。",
+        talents: ["适应力强，能进入不同环境和角色", "对潜意识、情绪、梦境、象征和心理变化敏感", "适合疗愈、艺术、心理、自我探索、灵性内容、叙事创作", "能理解别人的复杂和脆弱", "具备从低谷中重建自我的能力"],
+        relationship: "在关系里，你容易被深层、复杂、有命运感的连接吸引。你不满足于表面的轻松，更在意关系是否能触及真实的内在。",
+        shadow: "珀尔塞福涅原型的阴影，是可能过度被环境带动。你有时会不知道自己真正想要什么，也可能在他人的期待、关系的拉扯中失去方向。",
+        growth: "你正在经历的变化，不一定是惩罚。它可能是在帮助你离开旧的自己，进入更深、更真实的新阶段。",
+        secondary: "你的隐藏力量，是穿越变化并完成重生。"
+      },
+      G: {
+        name: "阿芙洛狄忒",
+        english: "Aphrodite",
+        title: "爱欲女神与美的唤醒者",
+        keywords: ["爱", "美", "魅力", "感受", "吸引力", "创造"],
+        quote: "你是爱与美的唤醒者。你的魅力，不是讨好世界，而是点亮自己。",
+        myth: "阿芙洛狄忒是古希腊神话中的爱与美女神。她象征爱情、吸引力、感官体验、魅力、欲望与美的力量。真正的美与爱，都拥有唤醒生命力的力量。",
+        personality: "如果你的主原型是阿芙洛狄忒，你的内在拥有很强的感受力和吸引力。你对氛围、美感、情绪、身体、音乐、气味、颜色和细节非常敏感，也很容易被一个瞬间打动。",
+        talents: ["有很强的审美力和情绪感染力", "适合艺术、内容、影像、美学、品牌、情感表达类方向", "能让普通事物变得有氛围、有吸引力", "擅长创造人与人之间的心动和连接", "能通过爱与美唤醒他人的感受力"],
+        relationship: "在关系里，你需要的是心动、浪漫、回应和真实的情感流动。你不适合长期待在冷漠、麻木、缺乏表达的关系里。",
+        shadow: "阿芙洛狄忒原型的阴影，是可能过度依赖外界回应。当你没有被关注、被赞美、被爱的时候，你可能会怀疑自己的魅力。",
+        growth: "请继续热爱美，热爱爱，热爱生命中的闪光瞬间。但也请把魅力收回自己手中。你不是为了被爱才美，你是因为真实地活着，所以美。",
+        secondary: "你的隐藏力量，是感受爱、美与生命的流动。"
+      }
+    };
+
+    let currentQuestionIndex = 0;
+    let answers = [];
+    let scores = {
+      A: 0,
+      B: 0,
+      C: 0,
+      D: 0,
+      E: 0,
+      F: 0,
+      G: 0
+    };
+
+    function showPage(pageId) {
+      document.getElementById("coverPage").classList.add("hidden");
+      document.getElementById("questionPage").classList.add("hidden");
+      document.getElementById("loadingPage").classList.add("hidden");
+      document.getElementById("resultPage").classList.add("hidden");
+      document.getElementById(pageId).classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function startTest() {
+      const act = getActivationLocal();
+      if (!act || new Date(act.expires_at) <= new Date()) {
+        clearActivationLocal();
+        showActivationState('need');
+        showPage('coverPage');
+        return;
+      }
+      currentQuestionIndex = 0;
+      answers = [];
+      scores = { A: 0, B: 0, C: 0, D: 0, E: 0, F: 0, G: 0 };
+      showPage("questionPage");
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = questions[currentQuestionIndex];
+      const total = questions.length;
+      const current = currentQuestionIndex + 1;
+
+      document.getElementById("progressText").innerText = `${current} / ${total}`;
+      document.getElementById("progressInner").style.width = `${(current - 1) / total * 100}%`;
+      document.getElementById("questionTitle").innerText = q.title;
+
+      const optionsBox = document.getElementById("optionsBox");
+      optionsBox.innerHTML = "";
+
+      Object.keys(q.options).forEach(key => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn";
+        btn.innerHTML = `<span class="option-key">${key}.</span>${q.options[key]}`;
+        btn.onclick = () => chooseOption(key);
+        optionsBox.appendChild(btn);
+      });
+    }
+
+    function chooseOption(key) {
+      answers.push(key);
+      scores[key] += 1;
+
+      currentQuestionIndex++;
+
+      if (currentQuestionIndex < questions.length) {
+        renderQuestion();
+      } else {
+        document.getElementById("progressInner").style.width = "100%";
+        showLoading();
+      }
+    }
+
+    function showLoading() {
+      showPage("loadingPage");
+      const loadingTexts = [
+        "正在点燃神殿之火……",
+        "正在读取你的内在力量……",
+        "正在召唤女神原型……"
+      ];
+
+      let i = 0;
+      const loadingText = document.getElementById("loadingText");
+      loadingText.innerText = loadingTexts[0];
+
+      const timer = setInterval(() => {
+        i++;
+        if (i < loadingTexts.length) {
+          loadingText.innerText = loadingTexts[i];
+        } else {
+          clearInterval(timer);
+          showResult();
+        }
+      }, 900);
+    }
+
+    function getResultKeys() {
+      const entries = Object.entries(scores);
+
+      entries.sort((a, b) => {
+        if (b[1] !== a[1]) return b[1] - a[1];
+        return 0;
+      });
+
+      const highestScore = entries[0][1];
+      const topKeys = entries.filter(item => item[1] === highestScore).map(item => item[0]);
+
+      let mainKey;
+
+      if (topKeys.length === 1) {
+        mainKey = topKeys[0];
+      } else {
+        const q16 = answers[15];
+        const q15 = answers[14];
+
+        if (topKeys.includes(q16)) {
+          mainKey = q16;
+        } else if (topKeys.includes(q15)) {
+          mainKey = q15;
+        } else {
+          mainKey = topKeys[0];
+        }
+      }
+
+      const remaining = entries.filter(item => item[0] !== mainKey);
+      remaining.sort((a, b) => {
+        if (b[1] !== a[1]) return b[1] - a[1];
+        return 0;
+      });
+
+      const secondScore = remaining[0][1];
+      const secondKeys = remaining.filter(item => item[1] === secondScore).map(item => item[0]);
+
+      let secondaryKey = secondKeys[0];
+
+      const q16 = answers[15];
+      const q15 = answers[14];
+
+      if (secondKeys.includes(q16) && q16 !== mainKey) {
+        secondaryKey = q16;
+      } else if (secondKeys.includes(q15) && q15 !== mainKey) {
+        secondaryKey = q15;
+      }
+
+      return { mainKey, secondaryKey };
+    }
+
+    function showResult() {
+      const { mainKey, secondaryKey } = getResultKeys();
+      const result = resultMap[mainKey];
+      const secondary = resultMap[secondaryKey];
+
+      document.getElementById("resultName").innerText = result.name;
+      document.getElementById("resultEnglish").innerText = result.english;
+      document.getElementById("resultTitle").innerText = result.title;
+
+      const keywordsBox = document.getElementById("keywordsBox");
+      keywordsBox.innerHTML = "";
+      result.keywords.forEach(k => {
+        const span = document.createElement("span");
+        span.className = "keyword";
+        span.innerText = k;
+        keywordsBox.appendChild(span);
+      });
+
+      document.getElementById("posterQuote").innerText = result.quote;
+
+      document.getElementById("secondaryBox").innerHTML =
+        `<strong>你的隐藏副原型：${secondary.name} ${secondary.english}</strong><br>${secondary.secondary}`;
+
+      document.getElementById("mythText").innerText = result.myth;
+      document.getElementById("personalityText").innerText = result.personality;
+      document.getElementById("relationshipText").innerText = result.relationship;
+      document.getElementById("shadowText").innerText = result.shadow;
+      document.getElementById("growthText").innerText = result.growth;
+
+      const talentsList = document.getElementById("talentsList");
+      talentsList.innerHTML = "";
+      result.talents.forEach(t => {
+        const li = document.createElement("li");
+        li.innerText = t;
+        talentsList.appendChild(li);
+      });
+
+      showPage("resultPage");
+    }
+
+    function restartTest() {
+      startTest();
+    }
+
+    function copyResult() {
+      const { mainKey } = getResultKeys();
+      const result = resultMap[mainKey];
+
+      const keywordsLine = result.keywords.join(' / ');
+
+      const text =
+`我刚测出了自己的希腊神话原型。
+
+我的结果是：
+${result.name} ${result.english}
+
+关键词：
+${keywordsLine}
+
+神谕：
+${result.quote}
+
+🌙 16 道直觉题，召唤你内在的女神力量
+👉 https://ac97b75b0e6dd52d2.app.workbuddy.link/
+
+🔑 激活码获取：小红书「王三洲」
+${XIAOHONGSHU_URL}`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        alert("结果已复制，可以粘贴分享啦。");
+      }).catch(() => {
+        alert("复制失败，你可以手动截图保存。");
+      });
+    }
+
+    async function saveResult() {
+      if (!initSupabase()) {
+        alert('网络加载失败，无法连接云端，请刷新页面重试');
+        return;
+      }
+      const act = getActivationLocal();
+      const { mainKey, secondaryKey } = getResultKeys();
+
+      const payload = {
+        code: act ? act.code : null,
+        result_key: mainKey,
+        secondary_key: secondaryKey,
+        answers: answers.join(''),
+        scores: scores,
+        user_agent: navigator.userAgent,
+        device_id: getDeviceId()
+      };
+
+      const { error } = await supabaseClient.from('test_results').insert(payload);
+
+      if (error) {
+        alert('保存失败：' + error.message);
+      } else {
+        alert('结果已保存到云端');
+      }
+    }
+
+    async function generatePoster() {
+      if (!window.html2canvas) {
+        alert('海报生成库加载中，请刷新页面重试');
+        return;
+      }
+
+      const { mainKey } = getResultKeys();
+      const result = resultMap[mainKey];
+
+      document.getElementById('posterGoddessName').innerText = result.name;
+      document.getElementById('posterGoddessEnglish').innerText = result.english;
+      document.getElementById('posterGoddessTitle').innerText = result.title;
+      document.getElementById('posterQuoteText').innerText = result.quote;
+      document.getElementById('posterQrImg').src = QR_CODE_DATA_URL;
+
+      const kwBox = document.getElementById('posterKeywords');
+      kwBox.innerHTML = '';
+      result.keywords.forEach(k => {
+        const s = document.createElement('span');
+        s.className = 'poster-keyword';
+        s.innerText = k;
+        kwBox.appendChild(s);
+      });
+
+      const tpl = document.getElementById('posterTemplate');
+      tpl.style.visibility = 'visible';
+      tpl.style.zIndex = '9999';
+
+      try {
+        const canvas = await html2canvas(tpl, {
+          scale: 2,
+          backgroundColor: '#141812',
+          useCORS: true,
+          logging: false,
+          width: 375,
+          height: tpl.offsetHeight || 600,
+          onclone: function (clonedDoc) {
+            const clonedTpl = clonedDoc.getElementById('posterTemplate');
+            clonedTpl.style.visibility = 'visible';
+            clonedTpl.style.position = 'absolute';
+            clonedTpl.style.left = '0';
+            clonedTpl.style.top = '0';
+            clonedTpl.style.zIndex = '9999';
+          }
+        });
+        const dataUrl = canvas.toDataURL('image/png');
+        document.getElementById('posterImageBox').innerHTML = '<img src="' + dataUrl + '" alt="分享海报" />';
+
+        const downloadBtn = document.getElementById('downloadPosterBtn');
+        downloadBtn.onclick = () => {
+          const a = document.createElement('a');
+          a.href = dataUrl;
+          a.download = '希腊女神测试结果_' + result.name + '.png';
+          a.click();
+        };
+
+        document.getElementById('posterModal').classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (err) {
+        console.error('Poster error:', err);
+        alert('海报生成失败：' + (err && err.message ? err.message : '未知错误'));
+      } finally {
+        tpl.style.visibility = 'hidden';
+        tpl.style.zIndex = '-1';
+      }
+    }
+
+    function closePoster() {
+      document.getElementById('posterModal').classList.add('hidden');
+    }
+
+    initActivation();
+  </script>
+</body>
+</html>
