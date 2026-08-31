@@ -14,23 +14,45 @@
 """
 
 import json
+import os
 import urllib.request
 import urllib.error
 
 SUPABASE_URL = "https://rfqgzegjpfgmimfvbtcc.supabase.co"
-SERVICE_ROLE_KEY = "在此粘贴你的 service_role key"  # TODO: 替换成真实 key
+# 优先读环境变量，避免把敏感 key 写进文件：SERVICE_ROLE_KEY=xxx python3 add_codes.py
+SERVICE_ROLE_KEY = os.environ.get("SERVICE_ROLE_KEY", "在此粘贴你的 service_role key")
 
 CODES = [
-    "GODDESS-9EX7-FWHQ",
-    "GODDESS-5DLV-6YU5",
-    "GODDESS-EUBN-WYVR",
-    "GODDESS-4WVZ-L593",
-    "GODDESS-WPJP-5ENW",
-    "GODDESS-EF4D-6MR5",
-    "GODDESS-9HGE-GBBN",
-    "GODDESS-C7UY-H9QD",
-    "GODDESS-CSFN-X2KA",
-    "GODDESS-G275-KRD5",
+    "GODDESS-K2YN-UL0C",
+    "GODDESS-47S5-13MQ",
+    "GODDESS-GRMH-HTN0",
+    "GODDESS-TJRM-SBQJ",
+    "GODDESS-DT0S-P36G",
+    "GODDESS-6ZPM-T7DE",
+    "GODDESS-Y2S6-8RON",
+    "GODDESS-IXYX-ZUBI",
+    "GODDESS-J3M0-RE06",
+    "GODDESS-BOM7-BPDR",
+    "GODDESS-VOCR-37JB",
+    "GODDESS-LMRP-93GT",
+    "GODDESS-FCEJ-C9X4",
+    "GODDESS-0PEN-YEZ9",
+    "GODDESS-W8PG-FVQU",
+    "GODDESS-7QVC-TKXW",
+    "GODDESS-AAU4-4ND8",
+    "GODDESS-Z0QT-E3AP",
+    "GODDESS-QRU9-GX42",
+    "GODDESS-XNN0-LCUC",
+    "GODDESS-18CQ-GJJT",
+    "GODDESS-432D-1LE2",
+    "GODDESS-51UK-K5TZ",
+    "GODDESS-LBOJ-PCNY",
+    "GODDESS-I0PY-RKMF",
+    "GODDESS-AMAR-I4CH",
+    "GODDESS-WM5I-OKX2",
+    "GODDESS-9IVF-JKU0",
+    "GODDESS-U4TR-UU1V",
+    "GODDESS-177H-E8JP",
 ]
 
 URL = f"{SUPABASE_URL}/rest/v1/activation_codes"
