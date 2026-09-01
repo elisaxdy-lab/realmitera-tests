@@ -1260,6 +1260,31 @@
       setItem: function(k,v){ try { localStorage.setItem(k,v); } catch(e){} },
       removeItem: function(k){ try { localStorage.removeItem(k); } catch(e){} }
     };
+    // Cookie 封装：移动端 WebView（如微信扫码）下 localStorage 常随进程回收被清空，
+    // 故激活态同时落地到 Cookie，跨会话持久性更强。
+    const _ck = {
+      get: function(k){
+        try {
+          const m = document.cookie.match(new RegExp('(?:^|; )' + k + '=([^;]*)'));
+          return m ? decodeURIComponent(m[1]) : null;
+        } catch(e){ return null; }
+      },
+      set: function(k, v, days){
+        try {
+          const d = new Date();
+          d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+          const secure = (location.protocol === 'https:' || location.protocol === 'http:') ? '' : '';
+          document.cookie = k + '=' + encodeURIComponent(v) +
+            '; expires=' + d.toUTCString() + '; path=/; SameSite=Lax' +
+            (location.protocol === 'https:' ? '; Secure' : '');
+        } catch(e){}
+      },
+      remove: function(k){
+        try {
+          document.cookie = k + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+        } catch(e){}
+      }
+    };
     const SUPABASE_URL = 'https://rfqgzegjpfgmimfvbtcc.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_LWOQViD_u_IkhadGsO3wbA_wg3xxypF';
     const XIAOHONGSHU_URL = 'http://xhslink.com/m/45i2cQhiynB';
@@ -1283,17 +1308,18 @@
     }
 
     function getDeviceId() {
-      let id = _ls.getItem('goddess_device_id');
+      let id = _ck.get('goddess_device_id') || _ls.getItem('goddess_device_id');
       if (!id) {
         id = (crypto.randomUUID ? crypto.randomUUID() : 'd-' + Math.random().toString(36).slice(2) + Date.now());
-        _ls.setItem('goddess_device_id', id);
       }
+      _ck.set('goddess_device_id', id, 365);
+      _ls.setItem('goddess_device_id', id);
       return id;
     }
 
     function getActivationLocal() {
       try {
-        const raw = _ls.getItem('goddess_activation');
+        const raw = _ck.get('goddess_activation') || _ls.getItem('goddess_activation');
         return raw ? JSON.parse(raw) : null;
       } catch (e) {
         return null;
@@ -1301,15 +1327,18 @@
     }
 
     function saveActivationLocal(code, expiresAt) {
-      _ls.setItem('goddess_activation', JSON.stringify({
+      const payload = JSON.stringify({
         code: code,
         expires_at: expiresAt,
         device_id: getDeviceId()
-      }));
+      });
+      _ls.setItem('goddess_activation', payload);
+      _ck.set('goddess_activation', payload, 30);
     }
 
     function clearActivationLocal() {
       _ls.removeItem('goddess_activation');
+      _ck.remove('goddess_activation');
     }
 
     function showActivationState(state) {
